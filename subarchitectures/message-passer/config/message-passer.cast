@@ -1,0 +1,7 @@
+HOST localhost
+
+SUBARCHITECTURE message-passer
+JAVA WM cast.architecture.SubarchitectureWorkingMemory
+JAVA TM cast.architecture.AlwaysPositiveTaskManager
+JAVA MG passer   messagepasser.MessagePasser
+JAVA MG receiver messagepasser.MessagePassee

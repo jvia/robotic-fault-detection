@@ -2,6 +2,7 @@
 *.class
 .idea/
 *.iml
+.depend
 
 # Compiled Object files
 *.slo
