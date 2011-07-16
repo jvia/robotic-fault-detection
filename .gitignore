@@ -1,5 +1,7 @@
 # Ignore Java build
 *.class
+.idea/
+*.iml
 
 # Compiled Object files
 *.slo
