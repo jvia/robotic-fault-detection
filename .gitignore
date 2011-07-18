@@ -3,6 +3,10 @@
 .idea/
 *.iml
 .depend
+nbproject/
+.classpath
+.project
+.buildxml
 
 # Compiled Object files
 *.slo
