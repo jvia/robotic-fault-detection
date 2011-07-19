@@ -1,8 +1,9 @@
-package helloworld;
+package helloWorld;
 
 import cast.architecture.ManagedComponent;
-import helloworld.Announcement;
+import helloWorld.src.java.helloworld.Announcement;
 import cast.AlreadyExistsOnWMException;
+import helloWorld.src.java.helloworld.Announcement;
 
 
 public class HelloWriter extends ManagedComponent {

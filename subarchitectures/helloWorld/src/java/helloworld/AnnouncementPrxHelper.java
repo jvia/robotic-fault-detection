@@ -18,7 +18,7 @@
 // </auto-generated>
 //
 
-package helloworld;
+package helloWorld.src.java.helloworld;
 
 public final class AnnouncementPrxHelper extends Ice.ObjectPrxHelperBase implements AnnouncementPrx
 {

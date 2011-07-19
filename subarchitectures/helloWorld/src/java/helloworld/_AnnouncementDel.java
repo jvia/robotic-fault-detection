@@ -18,7 +18,7 @@
 // </auto-generated>
 //
 
-package helloworld;
+package helloWorld.src.java.helloworld;
 
 public interface _AnnouncementDel extends Ice._ObjectDel
 {

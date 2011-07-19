@@ -18,7 +18,7 @@
 // </auto-generated>
 //
 
-package helloworld;
+package helloWorld.src.java.helloworld;
 
 public class Announcement extends Ice.ObjectImpl
 {

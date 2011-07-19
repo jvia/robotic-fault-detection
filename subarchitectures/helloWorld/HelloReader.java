@@ -1,4 +1,4 @@
-package helloworld;
+package helloWorld;
 
 import cast.architecture.ManagedComponent;
 //Factory functions for change filters
@@ -10,6 +10,7 @@ import cast.cdl.WorkingMemoryOperation;
 //For exceptions thrown by getMemoryEntry
 import cast.UnknownSubarchitectureException;
 import cast.DoesNotExistOnWMException;
+import helloWorld.src.java.helloworld.Announcement;
 
 
 public class HelloReader extends ManagedComponent {

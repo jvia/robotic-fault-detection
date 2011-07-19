@@ -18,7 +18,7 @@
 // </auto-generated>
 //
 
-package helloworld;
+package helloWorld.src.java.helloworld;
 
 public final class _AnnouncementDelM extends Ice._ObjectDelM implements _AnnouncementDel
 {

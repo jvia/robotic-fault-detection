@@ -18,7 +18,7 @@
 // </auto-generated>
 //
 
-package helloworld;
+package helloWorld.src.java.helloworld;
 
 public interface AnnouncementPrx extends Ice.ObjectPrx
 {
