@@ -1,10 +1,6 @@
 package sendReturn;
 
-import cast.ConsistencyException;
-import cast.DoesNotExistOnWMException;
-import cast.PermissionException;
 import cast.SubarchitectureComponentException;
-import cast.UnknownSubarchitectureException;
 import cast.architecture.ChangeFilterFactory;
 import cast.architecture.ManagedComponent;
 import cast.architecture.WorkingMemoryChangeReceiver;

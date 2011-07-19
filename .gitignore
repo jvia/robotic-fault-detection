@@ -21,3 +21,4 @@ nbproject/
 *.la
 *.a
 
+/output/
