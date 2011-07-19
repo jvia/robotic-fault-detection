@@ -1,4 +1,4 @@
-    Questions
+Questions
 ==========
 
 ### CAST ###
@@ -22,3 +22,7 @@
   casual chains
   causal chains in addition (just adds)
   
+
+### Ideas ###
+
+  - Make a graph visualizer which shows the communication occurring in the system.

@@ -34,7 +34,7 @@ public class Receiver extends ManagedComponent {
         try {
 
             ReturnMessage rm = getMemoryEntry(_wmc.address, ReturnMessage.class);
-            println("Received :: " + rm.message + " <> Memory :: " + this.getWorkingMemoryEntries(ReturnMessage.class).length);
+            println("Received :: " + rm.message + " <<>> Memory :: " + this.getWorkingMemoryEntries(ReturnMessage.class).length);
 
             // Invert message
             rm = new ReturnMessage(-rm.message);
