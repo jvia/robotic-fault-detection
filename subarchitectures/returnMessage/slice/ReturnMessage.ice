@@ -1,9 +1,9 @@
 #ifndef HWD_ICE
 #define HWD_ICE
 
-module sendReturn {
-  class ReturnMessage {
-    int message;
+module returnMessage {
+  class Message {
+    int msg;
   };
 };
 

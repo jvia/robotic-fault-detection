@@ -1,4 +1,4 @@
-package sendReturn;
+package returnMessage;
 
 import cast.SubarchitectureComponentException;
 import cast.architecture.ChangeFilterFactory;
@@ -16,7 +16,7 @@ public class Receiver extends ManagedComponent {
         super.start();
         println("Initializing Sender");
 
-        addChangeFilter(ChangeFilterFactory.createLocalTypeFilter(ReturnMessage.class, WorkingMemoryOperation.ADD),
+        addChangeFilter(ChangeFilterFactory.createLocalTypeFilter(Message.class, WorkingMemoryOperation.ADD),
                 new WorkingMemoryChangeReceiver() {
 
                     @Override
@@ -29,11 +29,11 @@ public class Receiver extends ManagedComponent {
     private void makeAnnouncement(WorkingMemoryChange _wmc) {
         try {
 
-            ReturnMessage rm = getMemoryEntry(_wmc.address, ReturnMessage.class);
-            println("Received :: " + rm.message + " <<>> Memory :: " + this.getWorkingMemoryEntries(ReturnMessage.class).length);
+            Message rm = getMemoryEntry(_wmc.address, Message.class);
+            println("Received :: " + rm.msg + " <<>> Memory :: " + this.getWorkingMemoryEntries(Message.class).length);
 
             // Invert message
-            rm = new ReturnMessage(-rm.message);
+            rm = new Message(-rm.msg);
             overwriteWorkingMemory(_wmc.address, rm);
 
         } catch (SubarchitectureComponentException ex) {

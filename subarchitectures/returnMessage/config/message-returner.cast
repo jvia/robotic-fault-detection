@@ -1,7 +1,7 @@
 HOST localhost
 
-SUBARCHITECTURE message-returner
+SUBARCHITECTURE messageReturner
 JAVA WM cast.architecture.SubarchitectureWorkingMemory
 JAVA TM cast.architecture.AlwaysPositiveTaskManager
-JAVA MG sender   sendReturn.Sender
-JAVA MG receiver sendReturn.Receiver
+JAVA MG sender   returnMessage.Sender
+JAVA MG receiver returnMessage.Receiver

@@ -1,4 +1,4 @@
-package sendReturn;
+package returnMessage;
 
 import cast.AlreadyExistsOnWMException;
 import cast.DoesNotExistOnWMException;
@@ -19,7 +19,7 @@ public class Sender extends ManagedComponent {
         super.start();
         println("Initializing Sender");
 
-        addChangeFilter(ChangeFilterFactory.createLocalTypeFilter(ReturnMessage.class, WorkingMemoryOperation.OVERWRITE),
+        addChangeFilter(ChangeFilterFactory.createLocalTypeFilter(Message.class, WorkingMemoryOperation.OVERWRITE),
                 new WorkingMemoryChangeReceiver() {
 
                     @Override
@@ -38,7 +38,7 @@ public class Sender extends ManagedComponent {
             
             try {
                 Thread.sleep(500L);
-                ReturnMessage rm = new ReturnMessage(msg++);
+                Message rm = new Message(msg++);
                 addToWorkingMemory(newDataID(), rm);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Sender.class.getName()).log(Level.SEVERE, null, ex);
@@ -50,8 +50,8 @@ public class Sender extends ManagedComponent {
 
     public void makeAnnouncement(WorkingMemoryChange _wmc) {
         try {
-            ReturnMessage rm = getMemoryEntry(_wmc.address, ReturnMessage.class);
-            println("Returned :: " + rm.message + " :: Now deleting...");
+            Message rm = getMemoryEntry(_wmc.address, Message.class);
+            println("Returned :: " + rm.msg + " :: Now deleting...");
             deleteFromWorkingMemory(_wmc.address);
             
         } catch (PermissionException ex) {
