@@ -29,8 +29,8 @@
   <target name="template">
     <echo>Executing &quot;${target}&quot; target for subarchitectures/helloWrld module...</echo>
     <ant target="${target}" dir="subarchitectures/helloWorld"/>
-    <echo>Executing &quot;${target}&quot; target for subarchitectures/message-passer module...</echo>
-    <ant target="${target}" dir="subarchitectures/message-passer"/>
+    <echo>Executing &quot;${target}&quot; target for subarchitectures/messagePasser module...</echo>
+    <ant target="${target}" dir="subarchitectures/messagePasser"/>
     <echo>Executing &quot;${target}&quot; target for subarchitectures/returnMessage module...</echo>
     <ant target="${target}" dir="subarchitectures/returnMessage"/>
     <echo>Executing &quot;${target}&quot; target for subarchitectures/statusUpdater module...</echo>
