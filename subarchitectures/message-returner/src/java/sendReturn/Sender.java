@@ -1,7 +1,6 @@
 package sendReturn;
 
 import cast.AlreadyExistsOnWMException;
-import cast.ConsistencyException;
 import cast.DoesNotExistOnWMException;
 import cast.PermissionException;
 import cast.UnknownSubarchitectureException;

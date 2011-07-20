@@ -1,29 +1,43 @@
 package helloWorld;
 
 import cast.architecture.ManagedComponent;
-//Factory functions for change filters
 import cast.architecture.ChangeFilterFactory;
-//Classes for receiving and managing changes
 import cast.architecture.WorkingMemoryChangeReceiver;
 import cast.cdl.WorkingMemoryChange;
 import cast.cdl.WorkingMemoryOperation;
-//For exceptions thrown by getMemoryEntry
 import cast.UnknownSubarchitectureException;
 import cast.DoesNotExistOnWMException;
-import helloWorld.src.java.helloworld.Announcement;
 
-
+/**
+ * 
+ * @author Jeremiah Via <jxv911@cs.bham.ac.uk>
+ */
 public class HelloReader extends ManagedComponent {
-    @Override public void start() {
-        addChangeFilter(ChangeFilterFactory.createLocalTypeFilter(Announcement.class, WorkingMemoryOperation.ADD),
-                        new WorkingMemoryChangeReceiver() {
-                            public void workingMemoryChanged(WorkingMemoryChange _wmc) {
-                                makeAnnouncement(_wmc);
-                            }
-                        });
+
+    /**
+     * 
+     */
+    @Override
+    public void start() {
+        // register call back method to be notified when Announcements are 
+        // addedd to working memory
+        addChangeFilter(ChangeFilterFactory.createLocalTypeFilter(
+                Announcement.class,
+                WorkingMemoryOperation.ADD),
+                new WorkingMemoryChangeReceiver() {
+
+                    @Override
+                    public void workingMemoryChanged(WorkingMemoryChange _wmc) {
+                        makeAnnouncement(_wmc);
+                    }
+                });
     }
 
-
+    /**
+     * Displays contents of announcement message and then kills the component.
+     * 
+     * @param _wmc the WorkingMemoryChange created by event
+     */
     private void makeAnnouncement(WorkingMemoryChange _wmc) {
         try {
             Announcement ann = getMemoryEntry(_wmc.address, Announcement.class);
@@ -33,5 +47,6 @@ public class HelloReader extends ManagedComponent {
         } catch (UnknownSubarchitectureException e) {
             e.printStackTrace();
         }
+
     }
 }

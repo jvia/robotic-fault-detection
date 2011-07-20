@@ -18,7 +18,7 @@
 // </auto-generated>
 //
 
-package helloWorld.src.java.helloworld;
+package helloWorld;
 
 public final class AnnouncementPrxHelper extends Ice.ObjectPrxHelperBase implements AnnouncementPrx
 {
@@ -151,7 +151,7 @@ public final class AnnouncementPrxHelper extends Ice.ObjectPrxHelperBase impleme
     public static final String[] __ids =
     {
         "::Ice::Object",
-        "::helloworld::Announcement"
+        "::helloWorld::Announcement"
     };
 
     public static String

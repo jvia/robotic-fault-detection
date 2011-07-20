@@ -1,11 +1,13 @@
 package helloWorld;
 
 import cast.architecture.ManagedComponent;
-import helloWorld.src.java.helloworld.Announcement;
 import cast.AlreadyExistsOnWMException;
-import helloWorld.src.java.helloworld.Announcement;
 
-
+/**
+ * A simple component which displays hello world and then exits.
+ * 
+ * @author Jeremiah Via <jxv911@cs.bham.ac.uk>
+ */
 public class HelloWriter extends ManagedComponent {
     @Override protected void runComponent() {
         println("Look out world, here I come...");
@@ -15,5 +17,6 @@ public class HelloWriter extends ManagedComponent {
         } catch (AlreadyExistsOnWMException e) {
             e.printStackTrace();
         }
+        
     }
 }

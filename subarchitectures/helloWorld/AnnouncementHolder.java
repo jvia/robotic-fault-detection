@@ -18,7 +18,7 @@
 // </auto-generated>
 //
 
-package helloWorld.src.java.helloworld;
+package helloWorld;
 
 public final class AnnouncementHolder extends Ice.ObjectHolderBase<Announcement>
 {

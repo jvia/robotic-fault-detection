@@ -28,7 +28,7 @@
        ========================================= -->
   <target name="template">
     <echo>Executing &quot;${target}&quot; target for subarchitectures/hello-world module...</echo>
-    <ant target="${target}" dir="subarchitectures/hello-world"/>
+    <ant target="${target}" dir="subarchitectures/helloWorld"/>
     <ant target="${target}" dir="subarchitectures/message-passer"/>
     <ant target="${target}" dir="subarchitectures/message-returner"/>
     <ant target="${target}" dir="subarchitectures/statusUpdater"/>

@@ -18,7 +18,7 @@
 // </auto-generated>
 //
 
-package helloWorld.src.java.helloworld;
+package helloWorld;
 
 public class Announcement extends Ice.ObjectImpl
 {
@@ -56,7 +56,7 @@ public class Announcement extends Ice.ObjectImpl
     public static final String[] __ids =
     {
         "::Ice::Object",
-        "::helloworld::Announcement"
+        "::helloWorld::Announcement"
     };
 
     public boolean
@@ -128,7 +128,7 @@ public class Announcement extends Ice.ObjectImpl
     __write(Ice.OutputStream __outS)
     {
         Ice.MarshalException ex = new Ice.MarshalException();
-        ex.reason = "type helloworld::Announcement was not generated with stream support";
+        ex.reason = "type helloWorld::Announcement was not generated with stream support";
         throw ex;
     }
 
@@ -136,7 +136,7 @@ public class Announcement extends Ice.ObjectImpl
     __read(Ice.InputStream __inS, boolean __rid)
     {
         Ice.MarshalException ex = new Ice.MarshalException();
-        ex.reason = "type helloworld::Announcement was not generated with stream support";
+        ex.reason = "type helloWorld::Announcement was not generated with stream support";
         throw ex;
     }
 

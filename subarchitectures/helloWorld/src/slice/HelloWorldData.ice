@@ -1,7 +1,7 @@
 #ifndef HWD_ICE
 #define HWD_ICE
 
-module helloworld {
+module helloWorld {
     class Announcement {
         string message;
     };
