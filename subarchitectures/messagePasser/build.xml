@@ -5,7 +5,7 @@
   <property name="output.dir" value="../../output/classes" />
 
   <!-- Controls what is compiled -->
-  <property name="src.dir" value="./src/java" />
+  <property name="src.dir" value="." />
   <property name="slice.dir" value="./src/slice" />
 
   <!-- Includes the slice2java task from Ice. Requires ant-ice.jar to be in your classpath -->
@@ -23,12 +23,12 @@
   <!-- Source generation                                                   -->
   <!-- =================================================================== -->
   <target name="slice" depends="prepare" description="generates source from slice">
-    <slice2java tie="true" outputdir="${src.dir}">
+<!--    <slice2java tie="true" outputdir="${src.dir}">
       <fileset dir="${slice.dir}" includes="PassedMessage.ice"/>
       <includepath>
         <pathelement path="${slice.dir}"/>
       </includepath>
-    </slice2java>
+    </slice2java>-->
   </target>
 
 

@@ -1,4 +1,4 @@
-package messagepasser;
+package messagePasser;
 
 import cast.SubarchitectureComponentException;
 import cast.architecture.ManagedComponent;
@@ -11,13 +11,13 @@ import cast.cdl.WorkingMemoryOperation;
 //For exceptions thrown by getMemoryEntry
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import passedmessage.IntMessage;
+import returnMessage.Message;
 
 public class MessagePassee extends ManagedComponent {
 
     @Override
     public void start() {
-        addChangeFilter(ChangeFilterFactory.createLocalTypeFilter(IntMessage.class, WorkingMemoryOperation.ADD),
+        addChangeFilter(ChangeFilterFactory.createLocalTypeFilter(Message.class, WorkingMemoryOperation.ADD),
                 new WorkingMemoryChangeReceiver() {
 
                     public void workingMemoryChanged(WorkingMemoryChange _wmc) {
@@ -28,9 +28,9 @@ public class MessagePassee extends ManagedComponent {
 
     private void makeAnnouncement(WorkingMemoryChange _wmc) {
         try {
-            IntMessage message = getMemoryEntry(_wmc.address, IntMessage.class);
-            println("Msg :: " + message.message +
-                    " Mem Size :: " + this.getWorkingMemoryEntries(IntMessage.class).length);
+            Message message = getMemoryEntry(_wmc.address, Message.class);
+            println("Msg :: " + message.msg +
+                    " Mem Size :: " + this.getWorkingMemoryEntries(Message.class).length);
 
             // remove received message from memory
             this.deleteFromWorkingMemory(_wmc.address);

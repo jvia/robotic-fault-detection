@@ -1,8 +1,8 @@
-package messagepasser;
+package messagePasser;
 
 import cast.architecture.ManagedComponent;
 import cast.AlreadyExistsOnWMException;
-import passedmessage.IntMessage;
+import returnMessage.Message;
 
 /**
  *
@@ -22,7 +22,7 @@ public class MessagePasser extends ManagedComponent {
             }
             
             // Create a new message
-            IntMessage message = new IntMessage(i++);
+            Message message = new Message(i++);
             
             
             try {
