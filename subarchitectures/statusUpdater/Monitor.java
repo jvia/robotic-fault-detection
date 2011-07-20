@@ -12,7 +12,7 @@ import cast.cdl.WorkingMemoryChange;
 import cast.cdl.WorkingMemoryOperation;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sendReturn.ReturnMessage;
+import returnMessage.Message;
 
 /**
  *
@@ -28,12 +28,12 @@ public class Monitor extends ManagedComponent {
         println("Initializing Monitor");
         try {
             dataID = newDataID();
-            addToWorkingMemory(dataID, new ReturnMessage(Integer.MIN_VALUE));
+            addToWorkingMemory(dataID, new Message(Integer.MIN_VALUE));
         } catch (AlreadyExistsOnWMException ex) {
             Logger.getLogger(Monitor.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        addChangeFilter(ChangeFilterFactory.createLocalTypeFilter(ReturnMessage.class, WorkingMemoryOperation.OVERWRITE),
+        addChangeFilter(ChangeFilterFactory.createLocalTypeFilter(Message.class, WorkingMemoryOperation.OVERWRITE),
                 new WorkingMemoryChangeReceiver() {
 
                     @Override
@@ -46,12 +46,12 @@ public class Monitor extends ManagedComponent {
     private void updateMonitor(WorkingMemoryChange _wmc) {
         try {
 
-            ReturnMessage msg = getMemoryEntry(_wmc.address, ReturnMessage.class);
-            ReturnMessage max = getMemoryEntry(dataID, ReturnMessage.class);
+            Message msg = getMemoryEntry(_wmc.address, Message.class);
+            Message max = getMemoryEntry(dataID, Message.class);
 
-            if (msg.message > max.message) {
-                max.message = msg.message;
-                println("Max value monitored :: " + max.message);
+            if (msg.msg > max.msg) {
+                max.msg = msg.msg;
+                println("Max value monitored :: " + max.msg);
 
                 try {
                     overwriteWorkingMemory(dataID, max);

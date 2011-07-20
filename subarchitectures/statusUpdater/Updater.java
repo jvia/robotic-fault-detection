@@ -7,7 +7,7 @@ import cast.PermissionException;
 import cast.architecture.ManagedComponent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sendReturn.ReturnMessage;
+import returnMessage.Message;
 
 /**
  *
@@ -15,14 +15,14 @@ import sendReturn.ReturnMessage;
  */
 public class Updater extends ManagedComponent {
 
-    ReturnMessage msg;
+    Message msg;
     String updateID;
 
     @Override
     protected void start() {
         super.start();
         updateID = newDataID();
-        msg = new ReturnMessage(0);
+        msg = new Message(0);
 
         try {
             addToWorkingMemory(updateID, msg);
@@ -43,7 +43,7 @@ public class Updater extends ManagedComponent {
                 int random = (int) Math.round(Math.random() * max);
 //                println("Generated :: " + random);
                 
-                msg = new ReturnMessage(random);
+                msg = new Message(random);
                 overwriteWorkingMemory(updateID, msg);
             } catch (DoesNotExistOnWMException ex) {
                 Logger.getLogger(Updater.class.getName()).log(Level.SEVERE, null, ex);
