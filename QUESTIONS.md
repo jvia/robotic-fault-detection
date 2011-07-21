@@ -28,6 +28,9 @@ Questions
   The fault detector runs standalone and will try to connect to CAST. So a plugin
   should be created which allows CAST data to be exported to the fault detector.
 
+- Can components join the system at any given point in time? Essentially, should I 
+  check for any new components and add them to the filter periodically?
+
 ### Ideas ###
 
   - Make a graph visualizer which shows the communication occurring in the system.
