@@ -23,6 +23,11 @@ Questions
   causal chains in addition (just adds)
   
 
+- What is the best way to architect the connection?
+
+  The fault detector runs standalone and will try to connect to CAST. So a plugin
+  should be created which allows CAST data to be exported to the fault detector.
+
 ### Ideas ###
 
   - Make a graph visualizer which shows the communication occurring in the system.

@@ -6,19 +6,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * This is a simple component which adds a random number to working memory 
+ * at random intervals.
  * 
  * @author Jeremiah Via <jxv911@cs.bham.ac.uk>
  */
-public class Updater extends ManagedComponent{
+public class Updater extends ManagedComponent {
 
     int max = 10000;
     int min = -max;
-    
+
     @Override
-    protected void start()
+    public void run()
     {
         int current = min;
-        
+
         for (int i = 0; i < 20; i++) {
             // Sleep for a random amount of time
             try {
@@ -26,10 +28,10 @@ public class Updater extends ManagedComponent{
             } catch (InterruptedException ex) {
                 Logger.getLogger(Updater.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             // Generate a random number
             UpdateMessage msg = new UpdateMessage((int) (min + Math.random() * (2 * max)));
-            
+
             // Attempt to add to memory
             try {
                 addToWorkingMemory(newDataID(), msg);
@@ -39,7 +41,4 @@ public class Updater extends ManagedComponent{
             }
         }
     }
-    
-    
-    
 }
