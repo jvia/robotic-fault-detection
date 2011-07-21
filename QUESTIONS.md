@@ -19,7 +19,7 @@ Questions
   message passing (write then delete)
   message passing w/ return (write then overwrite then delete by original)
   state update (continual overwrite)
-  casual chains
+  casual chains (these are just multiple components strung together)
   causal chains in addition (just adds)
   
 

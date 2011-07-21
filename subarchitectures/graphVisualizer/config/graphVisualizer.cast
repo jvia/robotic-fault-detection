@@ -1,0 +1,30 @@
+HOST localhost
+
+
+SUBARCHITECTURE hReader
+JAVA WM cast.architecture.SubarchitectureWorkingMemory
+JAVA TM cast.architecture.AlwaysPositiveTaskManager
+JAVA MG helloReader   helloWorld.HelloReader
+
+SUBARCHITECTURE hWriter
+JAVA WM cast.architecture.SubarchitectureWorkingMemory
+JAVA TM cast.architecture.AlwaysPositiveTaskManager
+JAVA MG helloWriter   helloWorld.HelloWriter
+
+SUBARCHITECTURE updateAndMonitor
+JAVA WM cast.architecture.SubarchitectureWorkingMemory
+JAVA TM cast.architecture.AlwaysPositiveTaskManager
+JAVA MG monitor       statusUpdater.Monitor
+JAVA MG updater       statusUpdater.Updater
+
+SUBARCHITECTURE messagePAsser
+JAVA WM cast.architecture.SubarchitectureWorkingMemory
+JAVA TM cast.architecture.AlwaysPositiveTaskManager
+JAVA MG receiver      messagePasser.MessagePassee
+JAVA MG sender        messagePasser.MessagePasser
+
+
+SUBARCHITECTURE graphVisualizer
+JAVA WM cast.architecture.SubarchitectureWorkingMemory
+JAVA TM cast.architecture.AlwaysPositiveTaskManager
+JAVA MG graph         graphVisualizer.GraphVisualizer

@@ -6,7 +6,7 @@
 
   <!-- Controls what is compiled -->
   <property name="src.dir" value="." />
-  <property name="slice.dir" value="./src/slice" />
+  <property name="slice.dir" value="./slice" />
 
   <!-- Includes the slice2java task from Ice. Requires ant-ice.jar to be in your classpath -->
   <taskdef name="slice2java" classname="Slice2JavaTask"/>

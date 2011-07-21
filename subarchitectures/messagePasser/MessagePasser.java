@@ -2,7 +2,6 @@ package messagePasser;
 
 import cast.architecture.ManagedComponent;
 import cast.AlreadyExistsOnWMException;
-import returnMessage.Message;
 
 /**
  *

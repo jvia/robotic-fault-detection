@@ -16,6 +16,7 @@ public class Receiver extends ManagedComponent {
         super.start();
         println("Initializing Sender");
 
+//        ChangeFilterFactory.createIDFilter(null)
         addChangeFilter(ChangeFilterFactory.createLocalTypeFilter(Message.class, WorkingMemoryOperation.ADD),
                 new WorkingMemoryChangeReceiver() {
 

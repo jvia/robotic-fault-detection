@@ -35,6 +35,10 @@
     <ant target="${target}" dir="subarchitectures/returnMessage"/>
     <echo>Executing &quot;${target}&quot; target for subarchitectures/statusUpdater module...</echo>
     <ant target="${target}" dir="subarchitectures/statusUpdater"/>
+    <echo>Executing &quot;${target}&quot; target for subarchitectures/graphVisualizer module...</echo>
+    <ant target="${target}" dir="subarchitectures/graphVisualizer"/>
+    <echo>Executing &quot;${target}&quot; target for subarchitectures/updater module...</echo>
+    <ant target="${target}" dir="subarchitectures/updater"/>
   </target>
 
 

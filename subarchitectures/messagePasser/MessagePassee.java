@@ -11,7 +11,6 @@ import cast.cdl.WorkingMemoryOperation;
 //For exceptions thrown by getMemoryEntry
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import returnMessage.Message;
 
 public class MessagePassee extends ManagedComponent {
 
@@ -29,7 +28,7 @@ public class MessagePassee extends ManagedComponent {
     private void makeAnnouncement(WorkingMemoryChange _wmc) {
         try {
             Message message = getMemoryEntry(_wmc.address, Message.class);
-            println("Msg :: " + message.msg +
+            println("Msg :: " + message.payload +
                     " Mem Size :: " + this.getWorkingMemoryEntries(Message.class).length);
 
             // remove received message from memory

@@ -40,11 +40,12 @@ public class Updater extends ManagedComponent {
 
         while (i++ < 20) {
             try {
+                
                 int random = (int) Math.round(Math.random() * max);
-//                println("Generated :: " + random);
                 
                 msg = new Message(random);
                 overwriteWorkingMemory(updateID, msg);
+                
             } catch (DoesNotExistOnWMException ex) {
                 Logger.getLogger(Updater.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ConsistencyException ex) {
@@ -52,12 +53,8 @@ public class Updater extends ManagedComponent {
             } catch (PermissionException ex) {
                 Logger.getLogger(Updater.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-
         }
 
         println("Done");
-        destroy();
-
     }
 }

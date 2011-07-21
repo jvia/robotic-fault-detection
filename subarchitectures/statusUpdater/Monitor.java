@@ -32,6 +32,7 @@ public class Monitor extends ManagedComponent {
         } catch (AlreadyExistsOnWMException ex) {
             Logger.getLogger(Monitor.class.getName()).log(Level.SEVERE, null, ex);
         }
+        ChangeFilterFactory.createSourceFilter(Message.class, "");
         
         addChangeFilter(ChangeFilterFactory.createLocalTypeFilter(Message.class, WorkingMemoryOperation.OVERWRITE),
                 new WorkingMemoryChangeReceiver() {

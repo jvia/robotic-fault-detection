@@ -7,6 +7,7 @@ import cast.cdl.WorkingMemoryChange;
 import cast.cdl.WorkingMemoryOperation;
 import cast.UnknownSubarchitectureException;
 import cast.DoesNotExistOnWMException;
+import javax.xml.bind.annotation.XmlElementDecl.GLOBAL;
 
 /**
  * 
