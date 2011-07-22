@@ -12,7 +12,10 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,6 +39,7 @@ public class MemorySkimmer extends ManagedComponent implements WorkingMemoryChan
     {
         try {
             server = new ServerSocket(PORT);
+            client = new Socket();
         } catch (IOException ex) {
             Logger.getLogger(MemorySkimmer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -48,19 +52,36 @@ public class MemorySkimmer extends ManagedComponent implements WorkingMemoryChan
     @Override
     protected void start()
     {
-        try {
-            println("Waiting for connection from fault detector...");
-            client = server.accept();
-            out = new ObjectOutputStream(client.getOutputStream())/*PrintWriter(client.getOutputStream(), true)*/;
-        } catch (IOException ex) {
-            Logger.getLogger(MemorySkimmer.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
+        // Create a non-blocking server connection
+        new Timer().scheduleAtFixedRate(new TimerTask() {
 
-        Map<String, ComponentDescription> comps = getComponentManager().getComponentDescriptions();
-        for (String name : comps.keySet()) {
+            @Override
+            public void run()
+            {
+                /*if (client.isConnected()) {
+                    cancel();
+                    return;
+                }*/
+                try {
+                    server.setSoTimeout(100);
+                    client = server.accept();
+
+                    if (client.isConnected()) {
+                        out = new ObjectOutputStream(client.getOutputStream()); 
+                        cancel();
+                    }
+                } catch (IOException ex) {
+                    log("Waiting for connection");
+//                    println("Waiting for connection...");
+//                    Logger.getLogger(MemorySkimmer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }, 0, 100);
+
+        // Subscribe to all change events
+        for (String name : getComponentManager().getComponentDescriptions().keySet())
             addChangeFilter(ChangeFilterFactory.createSourceFilter(name, WorkingMemoryOperation.WILDCARD), this);
-        }
 
         println("Now skimming...");
     }
@@ -78,6 +99,10 @@ public class MemorySkimmer extends ManagedComponent implements WorkingMemoryChan
     @Override
     public void workingMemoryChanged(WorkingMemoryChange wmc) throws CASTException
     {
+        // Nothing to write until we have a connection
+        if (!client.isConnected())
+            return;
+
         try {
             out.writeObject(new String[]{String.valueOf(Cast2Ms(wmc.timestamp)), wmc.operation.name(), wmc.src, wmc.address.id});
             out.flush();
@@ -106,6 +131,8 @@ public class MemorySkimmer extends ManagedComponent implements WorkingMemoryChan
     @Override
     public void destroy()
     {
+        if (!client.isConnected()) return;
+        
         try {
             out.writeObject(new String[]{"done"});
             out.flush();
