@@ -9,7 +9,7 @@ import cast.cdl.ComponentDescription;
 import cast.cdl.WorkingMemoryChange;
 import cast.cdl.WorkingMemoryOperation;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -27,7 +27,7 @@ public class MemorySkimmer extends ManagedComponent implements WorkingMemoryChan
 
     private ServerSocket server;
     private Socket client;
-    private PrintWriter out;
+    private ObjectOutputStream /*PrintWriter*/ out;
     public static int PORT = 5555;
 
     public MemorySkimmer()
@@ -45,7 +45,7 @@ public class MemorySkimmer extends ManagedComponent implements WorkingMemoryChan
         try {
             println("Waiting for connection from fault detector...");
             client = server.accept();
-            out = new PrintWriter(client.getOutputStream(), true);
+            out = new ObjectOutputStream(client.getOutputStream())/*PrintWriter(client.getOutputStream(), true)*/;
         } catch (IOException ex) {
             Logger.getLogger(MemorySkimmer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -62,21 +62,27 @@ public class MemorySkimmer extends ManagedComponent implements WorkingMemoryChan
     @Override
     public void workingMemoryChanged(WorkingMemoryChange wmc) throws CASTException
     {
-        String data = String.format("%d %s %s %s\n", Cast2Ms(wmc.timestamp), wmc.operation, wmc.src, wmc.address.id);
-        println(data);
-        out.write(data);
-        out.flush();
+        String sdata = String.format("%d %s %s %s\n", Cast2Ms(wmc.timestamp), wmc.operation, wmc.src, wmc.address.id);
+        println(sdata);
+        String[] data = {String.valueOf(Cast2Ms(wmc.timestamp)), wmc.operation.name(), wmc.src, wmc.address.id};
 
-        //                String.format("\n"
-        //                + "<timestamp>%d</timestamp>\n"
-        //                + "<operation>%s</operation>\n"
-        //                + "<src>%s</src>\n"
-        //                + "<address>\n"
-        //                + "  <id>%s</id>\n"
-        //                + "  <subarchitecture>%s</subarchitecture>\n"
-        //                + "</address>\n"
-        //                + "<type>%s</type>\n",
-        //                              Cast2Ms(wmc.timestamp), wmc.operation, wmc.src, wmc.address.id, wmc.address.subarchitecture, wmc.type)
+        try {
+            out.writeObject(data);
+            out.flush();
+
+            //                String.format("\n"
+            //                + "<timestamp>%d</timestamp>\n"
+            //                + "<operation>%s</operation>\n"
+            //                + "<src>%s</src>\n"
+            //                + "<address>\n"
+            //                + "  <id>%s</id>\n"
+            //                + "  <subarchitecture>%s</subarchitecture>\n"
+            //                + "</address>\n"
+            //                + "<type>%s</type>\n",
+            //                              Cast2Ms(wmc.timestamp), wmc.operation, wmc.src, wmc.address.id, wmc.address.subarchitecture, wmc.type)
+        } catch (IOException ex) {
+            Logger.getLogger(MemorySkimmer.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
@@ -84,10 +90,13 @@ public class MemorySkimmer extends ManagedComponent implements WorkingMemoryChan
     {
         return 1000 * ct.s + (ct.us / 1000);
     }
-    
+
     @Override
-    public void destroy() {
+    public void destroy()
+    {
         try {
+            out.writeObject(new String[]{"done"});
+            out.flush();
             out.close();
             client.close();
             server.close();

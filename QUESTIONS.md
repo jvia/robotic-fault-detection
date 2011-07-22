@@ -33,6 +33,10 @@ Questions
 - Can components join the system at any given point in time? Essentially, should I 
   check for any new components and add them to the filter periodically?
 
+- What is the best way to create a server w.r.t CAST? Does it make
+  sense to block the rest of the startup code while waiting for a
+  connection from the fault detector?
+
 ### Ideas ###
 
   - Make a graph visualizer which shows the communication occurring in the system.
