@@ -10,7 +10,6 @@ import cast.cdl.WorkingMemoryChange;
 import cast.cdl.WorkingMemoryOperation;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
@@ -18,8 +17,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * 
- * TODO: import nu.xom.Element
+ * This is a simple component which collects data and makes it available to
+ * the fault detecting software. 
  *
  * @author Jeremiah Via <jxv911@cs.bham.ac.uk>
  */
@@ -27,9 +26,12 @@ public class MemorySkimmer extends ManagedComponent implements WorkingMemoryChan
 
     private ServerSocket server;
     private Socket client;
-    private ObjectOutputStream /*PrintWriter*/ out;
+    private ObjectOutputStream out;
     public static int PORT = 5555;
 
+    /**
+     * Create object & open port.
+     */
     public MemorySkimmer()
     {
         try {
@@ -39,6 +41,10 @@ public class MemorySkimmer extends ManagedComponent implements WorkingMemoryChan
         }
     }
 
+    /**
+     * Start up the component by registering it for all events and opening a 
+     * connection to the fault detector.
+     */
     @Override
     protected void start()
     {
@@ -56,41 +62,47 @@ public class MemorySkimmer extends ManagedComponent implements WorkingMemoryChan
             addChangeFilter(ChangeFilterFactory.createSourceFilter(name, WorkingMemoryOperation.WILDCARD), this);
         }
 
-        println("Skimmer now skimming...");
+        println("Now skimming...");
     }
 
+    /**
+     * Call back method that is executed when any inter-component communication 
+     * occurs.
+     * 
+     * The method simply collects the data necessary for the fault detector 
+     * and writes it to a socket the fault detector is subscribing to.
+     * 
+     * @param wmc the change in working memory
+     * @throws CASTException bad memory change
+     */
     @Override
     public void workingMemoryChanged(WorkingMemoryChange wmc) throws CASTException
     {
-        String sdata = String.format("%d %s %s %s\n", Cast2Ms(wmc.timestamp), wmc.operation, wmc.src, wmc.address.id);
-        println(sdata);
-        String[] data = {String.valueOf(Cast2Ms(wmc.timestamp)), wmc.operation.name(), wmc.src, wmc.address.id};
-
         try {
-            out.writeObject(data);
+            out.writeObject(new String[]{String.valueOf(Cast2Ms(wmc.timestamp)), wmc.operation.name(), wmc.src, wmc.address.id});
             out.flush();
-
-            //                String.format("\n"
-            //                + "<timestamp>%d</timestamp>\n"
-            //                + "<operation>%s</operation>\n"
-            //                + "<src>%s</src>\n"
-            //                + "<address>\n"
-            //                + "  <id>%s</id>\n"
-            //                + "  <subarchitecture>%s</subarchitecture>\n"
-            //                + "</address>\n"
-            //                + "<type>%s</type>\n",
-            //                              Cast2Ms(wmc.timestamp), wmc.operation, wmc.src, wmc.address.id, wmc.address.subarchitecture, wmc.type)
         } catch (IOException ex) {
             Logger.getLogger(MemorySkimmer.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
+    /**
+     * Convert cast time to milliseconds.
+     * 
+     * @param ct cast time object containing seconds and microseconds.
+     * @return milliseconds
+     */
     private long Cast2Ms(CASTTime ct)
     {
         return 1000 * ct.s + (ct.us / 1000);
     }
 
+    /**
+     * Allow for graceful destruction of the component. 
+     * 
+     * This allows the component to send out a message to the client so it can
+     * close its own connection.
+     */
     @Override
     public void destroy()
     {
