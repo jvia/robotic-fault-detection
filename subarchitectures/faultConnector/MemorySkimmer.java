@@ -70,11 +70,10 @@ public class MemorySkimmer extends ManagedComponent implements WorkingMemoryChan
                     if (client.isConnected()) {
                         out = new ObjectOutputStream(client.getOutputStream()); 
                         cancel();
+                        println("Connected!");
                     }
                 } catch (IOException ex) {
                     log("Waiting for connection");
-//                    println("Waiting for connection...");
-//                    Logger.getLogger(MemorySkimmer.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }, 0, 100);
