@@ -5,15 +5,13 @@ import cast.architecture.ChangeFilterFactory;
 import cast.architecture.ManagedComponent;
 import cast.architecture.WorkingMemoryChangeReceiver;
 import cast.cdl.CASTTime;
-import cast.cdl.ComponentDescription;
 import cast.cdl.WorkingMemoryChange;
 import cast.cdl.WorkingMemoryOperation;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -30,6 +28,7 @@ public class MemorySkimmer extends ManagedComponent implements WorkingMemoryChan
     private ServerSocket server;
     private Socket client;
     private ObjectOutputStream out;
+    private ObjectInputStream in;
     public static int PORT = 5555;
 
     /**
@@ -60,15 +59,17 @@ public class MemorySkimmer extends ManagedComponent implements WorkingMemoryChan
             public void run()
             {
                 /*if (client.isConnected()) {
-                    cancel();
-                    return;
+                cancel();
+                return;
                 }*/
                 try {
                     server.setSoTimeout(100);
                     client = server.accept();
 
                     if (client.isConnected()) {
-                        out = new ObjectOutputStream(client.getOutputStream()); 
+                        out = new ObjectOutputStream(client.getOutputStream());
+                        out.flush();
+                        in = new ObjectInputStream(client.getInputStream());
                         cancel();
                         println("Connected!");
                     }
@@ -130,8 +131,9 @@ public class MemorySkimmer extends ManagedComponent implements WorkingMemoryChan
     @Override
     public void destroy()
     {
-        if (!client.isConnected()) return;
-        
+        if (!client.isConnected())
+            return;
+
         try {
             out.writeObject(new String[]{"done"});
             out.flush();
@@ -141,5 +143,31 @@ public class MemorySkimmer extends ManagedComponent implements WorkingMemoryChan
         } catch (IOException ex) {
             Logger.getLogger(MemorySkimmer.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void monitorExit()
+    {
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run()
+            {
+                try {
+                    if (in.read() == -1) {
+//                    String s = in.readUTF();
+//                    if (s.equals("done")){
+                        
+                        System.out.println("-1");
+                        out.close();
+                        in.close();
+                        client.close();
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(MemorySkimmer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                start();
+            }
+        }).start();
     }
 }

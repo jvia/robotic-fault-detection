@@ -1,7 +1,0 @@
-HOST localhost
-
-SUBARCHITECTURE helloWorld
-JAVA WM cast.architecture.SubarchitectureWorkingMemory
-JAVA TM cast.architecture.AlwaysPositiveTaskManager
-JAVA MG writer helloWorld.HelloWriter
-JAVA MG reader helloWorld.HelloReader

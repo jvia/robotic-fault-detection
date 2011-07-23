@@ -1,7 +1,0 @@
-HOST localhost
-
-SUBARCHITECTURE statusUpdater
-JAVA WM cast.architecture.SubarchitectureWorkingMemory
-JAVA TM cast.architecture.AlwaysPositiveTaskManager
-JAVA MG updater  statusUpdater.Updater  
-JAVA MG monitor  statusUpdater.Monitor
