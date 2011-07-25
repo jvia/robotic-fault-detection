@@ -7,6 +7,9 @@ nbproject/
 .classpath
 .project
 .buildxml
+lib/
+nbbuild.xml
+manifest.mf
 
 # Compiled Object files
 *.slo
