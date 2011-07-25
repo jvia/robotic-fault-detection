@@ -27,22 +27,17 @@
        children modules. Need to automate later?
        ========================================= -->
     <target name="template">
-<!--    <echo>Executing &quot;${target}&quot; target for subarchitectures/helloWrld module...</echo>
-    <ant target="${target}" dir="subarchitectures/helloWorld"/>
-    <echo>Executing &quot;${target}&quot; target for subarchitectures/messagePasser module...</echo>
-    <ant target="${target}" dir="subarchitectures/messagePasser"/>
-    <echo>Executing &quot;${target}&quot; target for subarchitectures/returnMessage module...</echo>
-    <ant target="${target}" dir="subarchitectures/returnMessage"/>
-    <echo>Executing &quot;${target}&quot; target for subarchitectures/statusUpdater module...</echo>
-    <ant target="${target}" dir="subarchitectures/statusUpdater"/>
-    <echo>Executing &quot;${target}&quot; target for subarchitectures/graphVisualizer module...</echo>
-    <ant target="${target}" dir="subarchitectures/graphVisualizer"/>-->
         <echo>Executing &quot;${target}&quot; target for subarchitectures/updater module...</echo>
         <ant target="${target}" dir="subarchitectures/updater"/>
+        
         <echo>Executing &quot;${target}&quot; target for subarchitectures/monitor module...</echo>
         <ant target="${target}" dir="subarchitectures/monitor"/>    
+        
         <echo>Executing &quot;${target}&quot; target for subarchitectures/faultConnector module...</echo>
         <ant target="${target}" dir="subarchitectures/faultConnector"/>
+        
+        <echo>Executing &quot;${target}&quot; target for subarchitectures/aucomPlugin module...</echo>
+        <ant target="${target}" dir="subarchitectures/aucomPlugin"/>
     </target>
 
 

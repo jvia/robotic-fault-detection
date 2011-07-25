@@ -25,3 +25,4 @@ manifest.mf
 *.a
 
 /output/
+/subarchitectures/aucomPlugin/build/
