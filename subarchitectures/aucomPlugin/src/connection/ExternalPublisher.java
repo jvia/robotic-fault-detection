@@ -1,21 +1,28 @@
 package connection;
 
+import cast.CASTException;
+import cast.architecture.ChangeFilterFactory;
 import cast.architecture.ManagedComponent;
+import cast.architecture.WorkingMemoryChangeReceiver;
+import cast.cdl.CASTTime;
+import cast.cdl.WorkingMemoryChange;
+import cast.cdl.WorkingMemoryOperation;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * A simple component which exposes inter-subarchitecture communication 
+ * to other programs.
+ * 
+ * 
  * @author Jeremiah Via <jxv911@cs.bham.ac.uk>
  */
-public class ExternalPublisher extends ManagedComponent {
+public class ExternalPublisher extends ManagedComponent implements WorkingMemoryChangeReceiver {
 
     private int port;
     private ServerSocket server;
@@ -37,15 +44,8 @@ public class ExternalPublisher extends ManagedComponent {
     @Override
     protected void start()
     {
-        // Create server & accept connection from client 
-        try {
-            println("Waiting...");
-            server = new ServerSocket(port);
-            client = server.accept();
-            println("Connected!");
-        } catch (IOException ex) {
-            log(Level.SEVERE, "Could not create server", ex);
-        }
+        connect();
+
 
         // open output stream
         try {
@@ -69,22 +69,24 @@ public class ExternalPublisher extends ManagedComponent {
             public void run()
             {
                 try {
-                    String fromCast;
+                    String[] fromCast;
                     boolean done = false;
                     try {
                         while (!done) {
-                            fromCast = input.readUTF();
-                            log(Level.INFO, String.format("Received %s from client", fromCast), null);
+                            fromCast = (String[]) input.readObject();
+                            log(Level.INFO, String.format("Received %s from client", fromCast[0]), null);
 
                             // initiate shutdown if cast says bye
-                            if (fromCast.equals(".")) {
+                            if (fromCast[0].equals(".")) {
                                 log(Level.INFO, "Received shutdown from client", null);
-                                output.writeUTF(".");
+                                output.writeObject(new String[]{"."});
                                 output.flush();
                                 done = true;
                                 sendingMessage = false;
                             }
                         }
+                    } catch (ClassNotFoundException ex) {
+                        log(Level.SEVERE, "Could not cast to String[]", ex);
                     } catch (IOException ex) {
                         log(Level.SEVERE, "Error reading input from client", ex);
                     }
@@ -99,27 +101,18 @@ public class ExternalPublisher extends ManagedComponent {
 
         // start sending data
         sendingMessage = true;
-        new Timer().scheduleAtFixedRate(new TimerTask() {
 
-            @Override
-            public void run()
-            {
-                if (sendingMessage) {
-                    try {
-                        output.writeUTF("hello");
-                        output.flush();
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException ex) {
-                            log(Level.SEVERE, null, ex);
-                        }
-                    } catch (IOException ex) {
-                        log(Level.SEVERE, "Error writing to client", ex);
-                    }
-                }
-            }
-        }, 0, 1000);
 
+        // Subscribe to all change events
+        StringBuilder b = new StringBuilder("Listening on: ");
+        for (String name : getComponentManager().getComponentDescriptions().keySet()) {
+            b.append(name);
+            b.append(" ");
+            addChangeFilter(ChangeFilterFactory.createSourceFilter(name, WorkingMemoryOperation.WILDCARD), this);
+        }
+        println(b);
+
+        println("Now skimming...");
     }
 
     @Override
@@ -133,15 +126,20 @@ public class ExternalPublisher extends ManagedComponent {
         if (!client.isClosed()) {
             try {
                 log(Level.INFO, "Sending shutdown signal to external client", null);
-                output.writeUTF(".");
+                output.writeObject(new String[]{"."});
                 output.flush();
             } catch (IOException ex) {
                 log(Level.SEVERE, "Could not send shutdown message", ex);
             }
 
             try {
-                String stop = input.readUTF();
-                if (stop.equals(".")) {
+                String[] stop = new String[1];
+                try {
+                    stop = (String[]) input.readObject();
+                } catch (ClassNotFoundException ex) {
+                    log(Level.SEVERE, "Could not cast to String[]", ex);
+                }
+                if (stop[0].equals(".")) {
                     log(Level.INFO, "Received acknowledgement from client", null);
                     try {
                         server.close();
@@ -167,21 +165,62 @@ public class ExternalPublisher extends ManagedComponent {
         Logger.getLogger(ExternalPublisher.class.getName()).log(lvl, msg, ex);
     }
 
-    private void sendMessages()
+    /**
+     * Call back method that is executed when any inter-component communication 
+     * occurs.
+     * 
+     * The method simply collects the data necessary for the fault detector 
+     * and writes it to a socket the fault detector is subscribing to.
+     * 
+     * @param wmc the change in working memory
+     * @throws CASTException bad memory change
+     */
+    @Override
+    public void workingMemoryChanged(WorkingMemoryChange wmc) throws CASTException
     {
-        while (sendingMessage) {
-            try {
-                output.writeUTF("hello");
+        // Nothing to write until we have a connection
+        if (!client.isConnected() && !sendingMessage)
+            return;
+
+        try {
+            if (sendingMessage) {
+                output.writeObject(new String[]{String.valueOf(Cast2Ms(wmc.timestamp)), wmc.operation.name(), wmc.src, wmc.address.id});
                 output.flush();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ex) {
-                    log(Level.SEVERE, null, ex);
-                }
-            } catch (IOException ex) {
-                log(Level.SEVERE, "Error writing to client", ex);
             }
+        } catch (IOException ex) {
+            log(Level.SEVERE, "Could not send data to client", ex);
         }
-        println("We're at the end of sendMessages");
+    }
+
+    /**
+     * Convert cast time to milliseconds.
+     * 
+     * @param ct cast time object containing seconds and microseconds.
+     * @return milliseconds
+     */
+    private long Cast2Ms(CASTTime ct)
+    {
+        return 1000 * ct.s + (ct.us / 1000);
+    }
+
+    private void connect()
+    {
+        boolean connected = false;
+        
+        // Create server & accept connection from client 
+        try {
+            println("Waiting...");
+            server = new ServerSocket(port);
+            client = server.accept();
+            connected = true;
+            println("Connected!");
+        } catch (IOException ex) {
+            log(Level.SEVERE, "Could not create server", ex);
+        }
+        
+        
+        while(!connected) {
+            //spin
+        }
     }
 }
