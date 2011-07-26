@@ -12,6 +12,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,6 +32,7 @@ public class ExternalPublisher extends ManagedComponent implements WorkingMemory
     private ObjectOutputStream output;
     private ObjectInputStream input;
     private boolean sendingMessage;
+    private boolean connected;
 
     public ExternalPublisher(int port)
     {
@@ -46,7 +49,10 @@ public class ExternalPublisher extends ManagedComponent implements WorkingMemory
     {
         connect();
 
+    }
 
+    private void connectedStart()
+    {
         // open output stream
         try {
             output = new ObjectOutputStream(client.getOutputStream());
@@ -205,22 +211,31 @@ public class ExternalPublisher extends ManagedComponent implements WorkingMemory
 
     private void connect()
     {
-        boolean connected = false;
-        
+        connected = false;
+
         // Create server & accept connection from client 
         try {
             println("Waiting...");
             server = new ServerSocket(port);
-            client = server.accept();
-            connected = true;
-            println("Connected!");
+            server.setSoTimeout(100);
         } catch (IOException ex) {
             log(Level.SEVERE, "Could not create server", ex);
         }
-        
-        
-        while(!connected) {
-            //spin
-        }
+
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+
+            @Override
+            public void run()
+            {
+                try {
+                    client = server.accept();
+                    connected = true;
+                    connectedStart();
+                } catch (IOException ex) {
+                    // stay silent about timeout
+                }
+
+            }
+        }, 0, 500);
     }
 }
