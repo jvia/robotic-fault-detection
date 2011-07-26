@@ -48,66 +48,15 @@ public class ExternalPublisher extends ManagedComponent implements WorkingMemory
     protected void start()
     {
         connect();
-
     }
 
     private void connectedStart()
     {
-        // open output stream
-        try {
-            output = new ObjectOutputStream(client.getOutputStream());
-            output.flush();
-        } catch (IOException ex) {
-            log(Level.SEVERE, "Could not create output stream", ex);
-        }
-
-        // open input stream
-        try {
-            input = new ObjectInputStream(client.getInputStream());
-        } catch (IOException ex) {
-            log(Level.SEVERE, "Could not create input stream", ex);
-        }
-
-        // make a thread to monitor input from client
-        new Thread(new Runnable() {
-
-            @Override
-            public void run()
-            {
-                try {
-                    String[] fromCast;
-                    boolean done = false;
-                    try {
-                        while (!done) {
-                            fromCast = (String[]) input.readObject();
-                            log(Level.INFO, String.format("Received %s from client", fromCast[0]), null);
-
-                            // initiate shutdown if cast says bye
-                            if (fromCast[0].equals(".")) {
-                                log(Level.INFO, "Received shutdown from client", null);
-                                output.writeObject(new String[]{"."});
-                                output.flush();
-                                done = true;
-                                sendingMessage = false;
-                            }
-                        }
-                    } catch (ClassNotFoundException ex) {
-                        log(Level.SEVERE, "Could not cast to String[]", ex);
-                    } catch (IOException ex) {
-                        log(Level.SEVERE, "Error reading input from client", ex);
-                    }
-
-                    client.close();
-                } catch (IOException ex) {
-                    log(Level.SEVERE, "IO exception closing client connection", ex);
-                }
-                destroy();
-            }
-        }).start();
+        openStreams();
+        createClientMonitor();
 
         // start sending data
         sendingMessage = true;
-
 
         // Subscribe to all change events
         StringBuilder b = new StringBuilder("Listening on: ");
@@ -124,38 +73,9 @@ public class ExternalPublisher extends ManagedComponent implements WorkingMemory
     @Override
     protected void destroy()
     {
-        println("Shutdown time...");
-        sendingMessage = false;
-
-
         // shutdown the client socket if it is still connected
         if (!client.isClosed()) {
-            try {
-                log(Level.INFO, "Sending shutdown signal to external client", null);
-                output.writeObject(new String[]{"."});
-                output.flush();
-            } catch (IOException ex) {
-                log(Level.SEVERE, "Could not send shutdown message", ex);
-            }
-
-            try {
-                String[] stop = new String[1];
-                try {
-                    stop = (String[]) input.readObject();
-                } catch (ClassNotFoundException ex) {
-                    log(Level.SEVERE, "Could not cast to String[]", ex);
-                }
-                if (stop[0].equals(".")) {
-                    log(Level.INFO, "Received acknowledgement from client", null);
-                    try {
-                        server.close();
-                    } catch (IOException ex) {
-                        log(Level.INFO, "IO waiting...", ex);
-                    }
-                }
-            } catch (IOException ex) {
-                log(Level.SEVERE, "Error reading client shutdown response", ex);
-            }
+            shutdown();
         }
     }
 
@@ -237,5 +157,112 @@ public class ExternalPublisher extends ManagedComponent implements WorkingMemory
 
             }
         }, 0, 500);
+    }
+
+    private void printCastMessage(String[] cast)
+    {
+        System.out.println(String.format("%-10s %-11s %-20s [%s]",
+                                         "[" + cast[0] + "]",
+                                         "[" + cast[1] + "]",
+                                         "[" + cast[2] + "]",
+                                         cast[3]));
+    }
+
+    private void openStreams()
+    {
+        // open output stream
+        try {
+            output = new ObjectOutputStream(client.getOutputStream());
+            output.flush();
+        } catch (IOException ex) {
+            log(Level.SEVERE, "Could not create output stream", ex);
+        }
+
+        // open input stream
+        try {
+            input = new ObjectInputStream(client.getInputStream());
+        } catch (IOException ex) {
+            log(Level.SEVERE, "Could not create input stream", ex);
+        }
+    }
+
+    private void createClientMonitor()
+    {
+        // make a thread to monitor input from client
+        new Thread(new Runnable() {
+
+            @Override
+            public void run()
+            {
+                try {
+                    String[] fromCast;
+                    boolean done = false;
+                    try {
+                        while (!done) {
+                            fromCast = (String[]) input.readObject();
+                            log(Level.INFO, String.format("Received %s from client", fromCast[0]), null);
+
+                            // initiate shutdown if cast says bye
+                            if (fromCast[0].equals(".")) {
+                                log(Level.INFO, "Received shutdown from client", null);
+                                output.writeObject(new String[]{"."});
+                                output.flush();
+                                done = true;
+                                sendingMessage = false;
+                            }
+                        }
+                    } catch (ClassNotFoundException ex) {
+                        log(Level.SEVERE, "Could not cast to String[]", ex);
+                    } catch (IOException ex) {
+                        log(Level.SEVERE, "Error reading input from client", ex);
+                    }
+
+                    client.close();
+                } catch (IOException ex) {
+                    log(Level.SEVERE, "IO exception closing client connection", ex);
+                }
+
+
+                restart();
+            }
+        }).start();
+    }
+
+    private void restart()
+    {
+        shutdown();
+        connect();
+    }
+
+    private void shutdown()
+    {
+        sendingMessage = false;
+
+        try {
+            log(Level.INFO, "Sending shutdown signal to external client", null);
+            output.writeObject(new String[]{"."});
+            output.flush();
+        } catch (IOException ex) {
+            log(Level.SEVERE, "Could not send shutdown message", ex);
+        }
+
+        try {
+            String[] stop = new String[1];
+            try {
+                stop = (String[]) input.readObject();
+            } catch (ClassNotFoundException ex) {
+                log(Level.SEVERE, "Could not cast to String[]", ex);
+            }
+            if (stop[0].equals(".")) {
+                log(Level.INFO, "Received acknowledgement from client", null);
+                try {
+                    server.close();
+                } catch (IOException ex) {
+                    log(Level.INFO, "IO waiting...", ex);
+                }
+            }
+        } catch (IOException ex) {
+            log(Level.SEVERE, "Error reading client shutdown response", ex);
+        }
     }
 }
