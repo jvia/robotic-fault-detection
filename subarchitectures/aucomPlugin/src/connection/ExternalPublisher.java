@@ -61,13 +61,10 @@ public class ExternalPublisher extends ManagedComponent implements WorkingMemory
         // Subscribe to all change events
         StringBuilder b = new StringBuilder("Listening on: ");
         for (String name : getComponentManager().getComponentDescriptions().keySet()) {
-            b.append(name);
-            b.append(" ");
+            b.append(name).append(" ");
             addChangeFilter(ChangeFilterFactory.createSourceFilter(name, WorkingMemoryOperation.WILDCARD), this);
         }
         println(b);
-
-        println("Now skimming...");
     }
 
     @Override
@@ -110,7 +107,7 @@ public class ExternalPublisher extends ManagedComponent implements WorkingMemory
 
         try {
             if (sendingMessage) {
-                output.writeObject(new String[]{String.valueOf(Cast2Ms(wmc.timestamp)), wmc.operation.name(), wmc.src, wmc.address.id});
+                output.writeObject(new String[]{String.valueOf(Cast2Ms(wmc.timestamp)), wmc.operation.name(), wmc.src, wmc.address.subarchitecture});
                 output.flush();
             }
         } catch (IOException ex) {
@@ -157,15 +154,6 @@ public class ExternalPublisher extends ManagedComponent implements WorkingMemory
 
             }
         }, 0, 500);
-    }
-
-    private void printCastMessage(String[] cast)
-    {
-        System.out.println(String.format("%-10s %-11s %-20s [%s]",
-                                         "[" + cast[0] + "]",
-                                         "[" + cast[1] + "]",
-                                         "[" + cast[2] + "]",
-                                         cast[3]));
     }
 
     private void openStreams()
