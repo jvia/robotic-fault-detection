@@ -26,3 +26,4 @@ manifest.mf
 
 /output/
 /subarchitectures/aucomPlugin/build/
+/subarchitectures/tmp/
