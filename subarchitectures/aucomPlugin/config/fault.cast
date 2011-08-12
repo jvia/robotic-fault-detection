@@ -1,16 +1,16 @@
 HOST localhost
 
-SUBARCHITECTURE fault
+SUBARCHITECTURE fault.sa
 JAVA WM cast.architecture.SubarchitectureWorkingMemory
 JAVA TM cast.architecture.AlwaysPositiveTaskManager
 JAVA MG skimmer connection.ExternalPublisher
 
-SUBARCHITECTURE updater
+SUBARCHITECTURE updater.sa
 JAVA WM cast.architecture.SubarchitectureWorkingMemory
 JAVA TM cast.architecture.AlwaysPositiveTaskManager
-JAVA MG updater updater.Updater
+JAVA MG updater updater.Updater --equal "0 500"
 
-SUBARCHITECTURE monitor
+SUBARCHITECTURE monitor.sa
 JAVA WM cast.architecture.SubarchitectureWorkingMemory
 JAVA TM cast.architecture.AlwaysPositiveTaskManager
 JAVA MG monitor monitor.Monitor
