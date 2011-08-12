@@ -1,0 +1,9 @@
+HOST localhost
+
+SUBARCHITECTURE collatz.sa
+JAVA WM cast.architecture.SubarchitectureWorkingMemory
+JAVA TM cast.architecture.AlwaysPositiveTaskManager
+JAVA MG end   collatz.End
+JAVA MG odd   collatz.Odd
+JAVA MG even  collatz.Even
+JAVA MG start collatz.Start
