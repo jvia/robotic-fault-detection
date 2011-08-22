@@ -71,7 +71,7 @@ public class ExternalPublisher extends ManagedComponent implements WorkingMemory
     protected void destroy()
     {
         // shutdown the client socket if it is still connected
-        if (!client.isClosed()) {
+        if (client != null && !client.isClosed()) {
             shutdown();
         }
     }
