@@ -4,71 +4,72 @@
   <!-- =================================================================== -->
   <!-- Init build system                                                   -->
   <!-- =================================================================== -->
-    <target name="init" description="compiles the source code">
-        <echo>"Preparing all builds"</echo>
-        <antcall target="template">
-            <param name="target" value="prepare"/>
-        </antcall>
-    </target>
+  <target name="init" description="compiles the source code">
+    <echo>"Preparing all builds"</echo>
+    <antcall target="template">
+      <param name="target" value="prepare"/>
+    </antcall>
+  </target>
 
   <!-- =================================================================== -->
   <!-- Calls compile                                                       -->
   <!-- =================================================================== -->
-    <target name="all" depends="compile" description="compiles the source code">
+  <target name="all" depends="compile" description="compiles the source code">
     <!-- <javac srcdir="" destdir="" /> -->
-    </target>
+  </target>
 
 
-
-
-  <!-- =========================================
-       Template target.  Never called explicitly,
-       only used to pass calls to underlying
-       children modules. Need to automate later?
-       ========================================= -->
-    <target name="template">
-        <echo>Executing &quot;${target}&quot; target for subarchitectures/updater module...</echo>
-        <ant target="${target}" dir="subarchitectures/updater"/>
-        
-        <echo>Executing &quot;${target}&quot; target for subarchitectures/monitor module...</echo>
-        <ant target="${target}" dir="subarchitectures/monitor"/>    
-        
-        <echo>Executing &quot;${target}&quot; target for subarchitectures/faultConnector module...</echo>
-        <ant target="${target}" dir="subarchitectures/faultConnector"/>
-        
-        <echo>Executing &quot;${target}&quot; target for subarchitectures/aucomPlugin module...</echo>
-        <ant target="${target}" dir="subarchitectures/aucomPlugin"/>
-    </target>
+  <!-- ================================================================== -->
+  <!-- Template target.  Never called explicitly, only used to pass       -->
+  <!-- calls to underlying children modules. Need to automate later?      -->
+  <!-- ================================================================== -->
+  <target name="template">
+    <!-- Updater -->
+    <echo>Executing &quot;${target}&quot; target for subarchitectures/updater module...</echo>
+    <ant target="${target}" dir="subarchitectures/updater"/>
+    <!-- Monitor -->
+    <echo>Executing &quot;${target}&quot; target for subarchitectures/monitor module...</echo>
+    <ant target="${target}" dir="subarchitectures/monitor"/>
+    <!-- Aucom Plugin -->
+    <echo>Executing &quot;${target}&quot; target for subarchitectures/aucomPlugin module...</echo>
+    <ant target="${target}" dir="subarchitectures/aucomPlugin"/>
+    <!-- Collatz -->
+    <echo>Executing &quot;${target}&quot; target for subarchitectures/collatz module...</echo>
+    <ant target="${target}" dir="subarchitectures/collatz"/>
+    <!-- Counter -->
+    <echo>Executing &quot;${target}&quot; target for subarchitectures/counter module...</echo>
+    <ant target="${target}" dir="subarchitectures/counter"/>
+  </target>
 
 
   <!-- =================================================================== -->
   <!-- Cleans all subdirs                                                  -->
   <!-- =================================================================== -->
-    <target name="clean" depends="init">
-        <echo>"Cleaning all builds"</echo>
-        <antcall target="template">
-            <param name="target" value="clean"/>
-        </antcall>
-    </target>
+  <target name="clean" depends="init">
+    <echo>"Cleaning all builds"</echo>
+    <antcall target="template">
+      <param name="target" value="clean"/>
+    </antcall>
+  </target>
 
   <!-- =================================================================== -->
   <!-- Generates source from slice in all subdirs                          -->
   <!-- =================================================================== -->
-    <target name="slice" depends="init">
-        <echo>"Generating all sources"</echo>
-        <antcall target="template">
-            <param name="target" value="slice"/>
-        </antcall>
-    </target>
+  <target name="slice" depends="init">
+    <echo>"Generating all sources"</echo>
+    <antcall target="template">
+      <param name="target" value="slice"/>
+    </antcall>
+  </target>
 
   <!-- =================================================================== -->
   <!-- Compiles all subdirs                                                -->
   <!-- =================================================================== -->
-    <target name="compile" depends="init">
-        <echo>"Compiling everything"</echo>
-        <antcall target="template">
-            <param name="target" value="compile"/>
-        </antcall>
-    </target>
+  <target name="compile" depends="init">
+    <echo>"Compiling everything"</echo>
+    <antcall target="template">
+      <param name="target" value="compile"/>
+    </antcall>
+  </target>
 
 </project>

@@ -1,7 +1,7 @@
 <!-- Inner build file for a module in the CogX system -->
 <project name="myproject" default="compile" basedir=".">
 
-	<!-- Controls where the output goes -->
+    <!-- Controls where the output goes -->
     <property name="output.dir" value="../../output/classes" />
 
 	<!-- Controls what is compiled -->
@@ -23,14 +23,6 @@
 	<!-- Source generation                                                   -->
 	<!-- =================================================================== -->
     <target name="slice" depends="prepare" description="generates source from slice">
-        <echo>Starting slice</echo>
-        <slice2java tie="true" outputdir="${src.dir}">
-            <fileset dir="${slice.dir}" includes="collatz.ice"/>
-            <includepath>
-                <pathelement path="${slice.dir}"/>
-            </includepath>
-        </slice2java>
-        <echo>Finishing slice</echo>
     </target>
 
 	
@@ -45,8 +37,5 @@
 	<!-- Cleanup                                                             -->
 	<!-- =================================================================== -->
     <target name="clean">
-
     </target>
-
-
 </project>

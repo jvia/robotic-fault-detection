@@ -4,6 +4,7 @@ SUBARCHITECTURE fault.sa
 JAVA WM cast.architecture.SubarchitectureWorkingMemory
 JAVA TM cast.architecture.AlwaysPositiveTaskManager
 JAVA MG skimmer connection.ExternalPublisher
+JAVA MG counter count.Count
 
 SUBARCHITECTURE updater.sa
 JAVA WM cast.architecture.SubarchitectureWorkingMemory
@@ -13,7 +14,6 @@ JAVA MG updater updater.Updater --gauss "750 20"
 SUBARCHITECTURE collatz.sa
 JAVA WM cast.architecture.SubarchitectureWorkingMemory
 JAVA TM cast.architecture.AlwaysPositiveTaskManager
-JAVA MG count collatz.Count
 JAVA MG end   collatz.End
 JAVA MG odd   collatz.Odd
 JAVA MG even  collatz.Even
