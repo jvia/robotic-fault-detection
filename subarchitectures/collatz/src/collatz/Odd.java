@@ -1,6 +1,7 @@
 package collatz;
 
 import cast.CASTException;
+import cast.DoesNotExistOnWMException;
 import cast.architecture.ChangeFilterFactory;
 import cast.architecture.ManagedComponent;
 import cast.architecture.WorkingMemoryChangeReceiver;
@@ -25,10 +26,16 @@ public class Odd extends ManagedComponent implements WorkingMemoryChangeReceiver
     @Override
     public void workingMemoryChanged(WorkingMemoryChange wmc) throws CASTException
     {
+        Number num;
+
+        try {
+            num = getMemoryEntry(wmc.address, Number.class);
+        } catch (DoesNotExistOnWMException ex) {
+            return;
+        }
         
-        Number num = getMemoryEntry(wmc.address, Number.class);
         if (num.value > 1 && num.value % 2 != 0) {
-            println(String.format("  Value: %4d      Count: %3d", num. value, num.count));
+            println(String.format("  Value: %4d      Count: %3d", num.value, num.count));
 
             try {
                 Thread.sleep(num.value);

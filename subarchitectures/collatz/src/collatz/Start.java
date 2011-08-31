@@ -4,6 +4,7 @@ import cast.CASTException;
 import cast.architecture.ChangeFilterFactory;
 import cast.architecture.ManagedComponent;
 import cast.architecture.WorkingMemoryChangeReceiver;
+import cast.cdl.CASTTime;
 import cast.cdl.WorkingMemoryChange;
 import cast.cdl.WorkingMemoryOperation;
 import java.util.Map;
@@ -28,11 +29,11 @@ public class Start extends ManagedComponent implements WorkingMemoryChangeReceiv
     @Override
     protected void configure(Map<String, String> _config)
     {
-        if (_config.containsKey("--max"))
+        if (_config.containsKey("--max")) {
             max = Integer.parseInt(_config.get("--max"));
-        else
+        } else {
             max = 100;
-
+        }
     }
 
     @Override

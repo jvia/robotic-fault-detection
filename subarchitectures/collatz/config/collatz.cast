@@ -3,6 +3,7 @@ HOST localhost
 SUBARCHITECTURE collatz.sa
 JAVA WM cast.architecture.SubarchitectureWorkingMemory
 JAVA TM cast.architecture.AlwaysPositiveTaskManager
+JAVA MG count collatz.Count
 JAVA MG end   collatz.End
 JAVA MG odd   collatz.Odd
 JAVA MG even  collatz.Even

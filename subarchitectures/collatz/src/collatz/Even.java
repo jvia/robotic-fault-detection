@@ -1,6 +1,7 @@
 package collatz;
 
 import cast.CASTException;
+import cast.DoesNotExistOnWMException;
 import cast.architecture.ChangeFilterFactory;
 import cast.architecture.ManagedComponent;
 import cast.architecture.WorkingMemoryChangeReceiver;
@@ -25,15 +26,20 @@ public class Even extends ManagedComponent implements WorkingMemoryChangeReceive
     @Override
     public void workingMemoryChanged(WorkingMemoryChange wmc) throws CASTException
     {
-        Number num = getMemoryEntry(wmc.address, Number.class);
+        Number num;
+        try {
+            num = getMemoryEntry(wmc.address, Number.class);
+        } catch (DoesNotExistOnWMException ex) {
+            return;
+        }
 
         if (num.value > 1 && num.value % 2 == 0) {
-            println(String.format(" Value: %4d      Count: %3d", num. value, num.count));
+            println(String.format(" Value: %4d      Count: %3d", num.value, num.count));
 
             try {
                 Thread.sleep(num.value);
             } catch (InterruptedException ex) {
-                Logger.getLogger(End.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(End.class.getName()).log(Level.SEVERE, "Could not sleep", ex);
             }
 
             num.value /= 2;
