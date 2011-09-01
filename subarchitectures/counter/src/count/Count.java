@@ -43,9 +43,12 @@ public class Count extends ManagedComponent implements WorkingMemoryChangeReceiv
     {
         ++count;
 
-        if (count % 10 == 0) {
+        if (count % 100 == 0) {
             println(">>>>> " + count);
         }
+        
+        if (count == ERROR_COUNT)
+            println(">>>>>>>>>> ERROR INDUCED AT " + cast2Ms(wmc.timestamp) + " ms <<<<<<<<<<");
 
         // We're collecting 4,000 observations in the time series
         if (count == SHUTDOWN_COUNT) {
@@ -68,5 +71,10 @@ public class Count extends ManagedComponent implements WorkingMemoryChangeReceiv
     public static long cast2Ms(CASTTime ct)
     {
         return 1000 * ct.s + (ct.us / 1000);
+    }
+
+    public static boolean isErrorCondition()
+    {
+        return count >= ERROR_COUNT;
     }
 }

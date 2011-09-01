@@ -2,6 +2,7 @@ package updater;
 
 import cast.AlreadyExistsOnWMException;
 import cast.architecture.ManagedComponent;
+import count.Count;
 import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
@@ -76,16 +77,19 @@ public class Updater extends ManagedComponent {
             // Generate a random number
             UpdateMessage msg = new UpdateMessage((int) (MIN + Math.random() * (2 * MAX)));
 
-            // Attempt to add to memory & then sleep
-            try {
-                addToWorkingMemory(newDataID(), msg);
-                println(msg.msg);
-                Thread.sleep(sleepTime());
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Updater.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (AlreadyExistsOnWMException ex) {
-                Logger.getLogger(Updater.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            // Simulate death
+//            if (!Count.isErrorCondition()) {
+                // Attempt to add to memory & then sleep
+                try {
+                    addToWorkingMemory(newDataID(), msg);
+                    println(msg.msg);
+                    Thread.sleep(sleepTime());
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Updater.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (AlreadyExistsOnWMException ex) {
+                    Logger.getLogger(Updater.class.getName()).log(Level.SEVERE, null, ex);
+                }
+//            }
         }
     }
 

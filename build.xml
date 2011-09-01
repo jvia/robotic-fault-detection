@@ -24,6 +24,9 @@
   <!-- calls to underlying children modules. Need to automate later?      -->
   <!-- ================================================================== -->
   <target name="template">
+    <!-- Counter -->
+    <echo>Executing &quot;${target}&quot; target for subarchitectures/counter module...</echo>
+    <ant target="${target}" dir="subarchitectures/counter"/>
     <!-- Updater -->
     <echo>Executing &quot;${target}&quot; target for subarchitectures/updater module...</echo>
     <ant target="${target}" dir="subarchitectures/updater"/>
@@ -36,9 +39,6 @@
     <!-- Collatz -->
     <echo>Executing &quot;${target}&quot; target for subarchitectures/collatz module...</echo>
     <ant target="${target}" dir="subarchitectures/collatz"/>
-    <!-- Counter -->
-    <echo>Executing &quot;${target}&quot; target for subarchitectures/counter module...</echo>
-    <ant target="${target}" dir="subarchitectures/counter"/>
   </target>
 
 
