@@ -17,7 +17,7 @@ public class Count extends ManagedComponent implements WorkingMemoryChangeReceiv
 
     private static int count;
     public static final int ERROR_COUNT = Integer.MAX_VALUE; // so no error
-    public static final int SHUTDOWN_COUNT = 2050;
+    public static final int SHUTDOWN_COUNT = 2010; 
 
     public Count()
     {

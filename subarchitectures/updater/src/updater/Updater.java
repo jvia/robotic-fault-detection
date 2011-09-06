@@ -77,19 +77,24 @@ public class Updater extends ManagedComponent {
             // Generate a random number
             UpdateMessage msg = new UpdateMessage((int) (MIN + Math.random() * (2 * MAX)));
 
-            // Simulate death
-//            if (!Count.isErrorCondition()) {
-                // Attempt to add to memory & then sleep
-                try {
-                    addToWorkingMemory(newDataID(), msg);
-                    println(msg.msg);
-                    Thread.sleep(sleepTime());
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Updater.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (AlreadyExistsOnWMException ex) {
-                    Logger.getLogger(Updater.class.getName()).log(Level.SEVERE, null, ex);
-                }
-//            }
+            // Simulate resource starvation
+            // if (Count.isErrorCondition())
+            //     try {
+            //     Thread.sleep(2000);
+            // } catch (InterruptedException ex) {
+            //     Logger.getLogger(Updater.class.getName()).log(Level.SEVERE, null, ex);
+            // }
+            
+            // Attempt to add to memory & then sleep
+            try {
+                addToWorkingMemory(newDataID(), msg);
+                println(msg.msg);
+                Thread.sleep(sleepTime());
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Updater.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (AlreadyExistsOnWMException ex) {
+                Logger.getLogger(Updater.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -119,6 +124,9 @@ public class Updater extends ManagedComponent {
             default:
                 time = vals[0] + random.nextInt(vals[1] - vals[0]);
         }
+
+        if (time < 0)
+            time = 0;
 
         return time;
     }

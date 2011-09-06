@@ -7,6 +7,8 @@ import cast.architecture.ManagedComponent;
 import cast.architecture.WorkingMemoryChangeReceiver;
 import cast.cdl.WorkingMemoryChange;
 import cast.cdl.WorkingMemoryOperation;
+
+import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import updater.UpdateMessage;
@@ -20,7 +22,6 @@ public class Monitor extends ManagedComponent implements WorkingMemoryChangeRece
     private int max;
     private int min;
     private int mean;
-    private int lastUpdate;
     private int updatesReceived;
     private String address;
 
@@ -29,7 +30,6 @@ public class Monitor extends ManagedComponent implements WorkingMemoryChangeRece
         max = Integer.MIN_VALUE;
         min = Integer.MAX_VALUE;
         mean = 0;
-        lastUpdate = 0;
         updatesReceived = 0;
         address = newDataID();
     }
@@ -60,7 +60,6 @@ public class Monitor extends ManagedComponent implements WorkingMemoryChangeRece
         mean = (update + (updatesReceived * mean)) / (updatesReceived + 1);
 
         // current update becomes the lastUpdate and increment updatesReceived
-        lastUpdate = update;
         updatesReceived++;
 
         // Overwrite monitor message
