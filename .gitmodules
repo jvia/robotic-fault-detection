@@ -1,0 +1,15 @@
+[submodule "subarchitectures/aucom.sa"]
+	path = subarchitectures/aucom.sa
+	url = git@github.com:jvia/aucom.sa.git
+[submodule "subarchitectures/collatz.sa"]
+	path = subarchitectures/collatz.sa
+	url = git@github.com:jvia/collatz.sa.git
+[submodule "subarchitectures/updater.sa"]
+	path = subarchitectures/updater.sa
+	url = git@github.com:jvia/updater.sa.git
+[submodule "subarchitectures/monitor.sa"]
+	path = subarchitectures/monitor.sa
+	url = git@github.com:jvia/monitor.sa.git
+[submodule "subarchitectures/counter.sa"]
+	path = subarchitectures/counter.sa
+	url = git@github.com:jvia/counter.sa.git
