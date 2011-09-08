@@ -119,6 +119,7 @@ public class Updater extends ManagedComponent {
         switch (dist) {
             case Gaussian:
                 time = (long) (vals[0] + (random.nextGaussian() * vals[1]));
+                if (time < 0) time = 0;
                 break;
             case Equal:
             default:

@@ -11,6 +11,8 @@ import cast.cdl.WorkingMemoryOperation;
 import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import count.Count;
 import updater.UpdateMessage;
 
 /**
@@ -63,6 +65,12 @@ public class Monitor extends ManagedComponent implements WorkingMemoryChangeRece
         updatesReceived++;
 
         // Overwrite monitor message
+//        if (Count.isErrorCondition())
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
         overwriteWorkingMemory(address, new MonitorMessage(max, min, mean));
         println(String.format("Max: %5d  Min: %5d  Mean: %5d", max, min, mean));
     }

@@ -16,8 +16,14 @@ import cast.cdl.WorkingMemoryOperation;
 public class Count extends ManagedComponent implements WorkingMemoryChangeReceiver {
 
     private static int count;
-    public static final int ERROR_COUNT = Integer.MAX_VALUE; // so no error
-    public static final int SHUTDOWN_COUNT = 2010; 
+    // Error behavior
+    //public static final int ERROR_COUNT = 2000;
+    //public static final int RECOVERY_COUNT = 3000;
+    //public static final int SHUTDOWN_COUNT = 4200;
+    // No error
+    public static final int ERROR_COUNT = Integer.MAX_VALUE;
+    public static final int RECOVERY_COUNT = Integer.MAX_VALUE;
+    public static final int SHUTDOWN_COUNT = Integer.MAX_VALUE;
 
     public Count()
     {
@@ -33,9 +39,6 @@ public class Count extends ManagedComponent implements WorkingMemoryChangeReceiv
             addChangeFilter(ChangeFilterFactory.createSourceFilter(name, WorkingMemoryOperation.WILDCARD), this);
         }
         println(b);
-//        addChangeFilter(ChangeFilterFactory.createOperationFilter(WorkingMemoryOperation.ADD), this);
-//        addChangeFilter(ChangeFilterFactory.createOperationFilter(WorkingMemoryOperation.DELETE), this);
-//        addChangeFilter(ChangeFilterFactory.createOperationFilter(WorkingMemoryOperation.OVERWRITE), this);
     }
 
     @Override
@@ -75,6 +78,6 @@ public class Count extends ManagedComponent implements WorkingMemoryChangeReceiv
 
     public static boolean isErrorCondition()
     {
-        return count >= ERROR_COUNT;
+        return ERROR_COUNT < count && count < RECOVERY_COUNT;
     }
 }
