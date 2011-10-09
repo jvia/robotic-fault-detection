@@ -25,20 +25,20 @@
   <!-- ================================================================== -->
   <target name="template">
     <!-- Counter -->
-    <echo>Executing &quot;${target}&quot; target for subarchitectures/counter module...</echo>
-    <ant target="${target}" dir="subarchitectures/counter"/>
+    <echo>Executing &quot;${target}&quot; target for subarchitectures/counter.sa...</echo>
+    <ant target="${target}" dir="subarchitectures/counter.sa"/>
     <!-- Updater -->
-    <echo>Executing &quot;${target}&quot; target for subarchitectures/updater module...</echo>
-    <ant target="${target}" dir="subarchitectures/updater"/>
+    <echo>Executing &quot;${target}&quot; target for subarchitectures/updater.sa...</echo>
+    <ant target="${target}" dir="subarchitectures/updater.sa"/>
     <!-- Monitor -->
-    <echo>Executing &quot;${target}&quot; target for subarchitectures/monitor module...</echo>
-    <ant target="${target}" dir="subarchitectures/monitor"/>
+    <echo>Executing &quot;${target}&quot; target for subarchitectures/monitor.sa...</echo>
+    <ant target="${target}" dir="subarchitectures/monitor.sa"/>
     <!-- Aucom Plugin -->
-    <echo>Executing &quot;${target}&quot; target for subarchitectures/aucomPlugin module...</echo>
-    <ant target="${target}" dir="subarchitectures/aucomPlugin"/>
+    <echo>Executing &quot;${target}&quot; target for subarchitectures/aucom.sa...</echo>
+    <ant target="${target}" dir="subarchitectures/aucom.sa"/>
     <!-- Collatz -->
-    <echo>Executing &quot;${target}&quot; target for subarchitectures/collatz module...</echo>
-    <ant target="${target}" dir="subarchitectures/collatz"/>
+    <echo>Executing &quot;${target}&quot; target for subarchitectures/collatz.sa...</echo>
+    <ant target="${target}" dir="subarchitectures/collatz.sa"/>
   </target>
 
 
